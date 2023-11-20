@@ -2,7 +2,7 @@
 #include "lists.h"
 
 /**
- * listit_len - count the number of nodes in a list
+ * listint_len - count the number of nodes in a list
  * @h: head pointer of the list
  * Return: number of nodes in the list
  */
