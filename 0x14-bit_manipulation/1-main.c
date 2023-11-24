@@ -8,6 +8,8 @@
  */
 int main(void)
 {
+	int size = sizeof(unsigned long int);
+
     print_binary(0);
     printf("\n");
     print_binary(1);
@@ -20,5 +22,6 @@ int main(void)
     printf("\n");
     print_binary(-1);
     printf("\n");
+    printf("%d", size);
     return (0);
 }

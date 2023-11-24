@@ -8,11 +8,11 @@
 
 void print_binary(unsigned long int n)
 {
-	int leadingZero = 1, sizeOfIn = (sizeof(n) * 8);
+	int leadingZero = 1;
 	int i;
-	unsigned long int k = 1 << (sizeOfIn - 1);
+	unsigned long int k = (unsigned long int) 1 << 63;
 
-	for (i = 0; i < sizeOfIn; i++)
+	for (i = 0; i < 64; i++)
 	{
 		char c = (k & n) ? '1' : '0';
 
