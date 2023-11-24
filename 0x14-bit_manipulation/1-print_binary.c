@@ -24,7 +24,4 @@ void print_binary(unsigned long int n)
 		leadingZero = 0;
 		_putchar(c);
 	}
-
-	if (leadingZero)
-		_putchar('0');
 }
