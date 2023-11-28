@@ -3,6 +3,34 @@
 #include <unistd.h>
 #include <stdlib.h>
 
+void CheckFileTo(int num, char op, int fd = 0, char *fileName = NULL)
+{	
+	if (num == -1 && (op == 'W' || op == 'O'))
+	{
+		dprintf(STDERR_FILENO, "Error: Can't write to %s\n", fileName);
+		exit(99);
+	}
+	else if (num == -1 && op == 'C')
+	{
+		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd);
+		exit(100);
+	}
+}
+
+void CheckFileFrom(int num, char op, int fd = 0, char *fileName = NULL)
+{
+	if (num == -1 && (op == 'W' || op == 'O'))
+	{
+		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", fileName);
+		exit(98);
+	}
+	else if (num == -1 && op == 'C')
+	{
+		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd);
+		exit(100);
+	}
+}
+
 int main(int argc, char **argv)
 {
 	int fileTo, fileFrom, lettersRead = -1, lettersWritten = -1;
