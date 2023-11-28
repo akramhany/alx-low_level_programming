@@ -18,18 +18,29 @@ ssize_t read_textfile(const char *filename, size_t letters)
 		return (0);
 
 	if (filename == NULL)
+	{
+		free (buffer);
 		return (0);
+	}
 
 	fd = open(filename, O_RDONLY);
 	if (fd == -1)
+	{
+		free (buffer);
 		return (0);
+	}
 
 	lettersRead = read(fd, buffer, letters);
 
 	if (lettersRead == -1)
+	{
+		free (buffer);
 		return (0);
+	}
 
 	lettersWritten = write(STDOUT_FILENO, buffer, lettersRead);
+
+	free (buffer);
 
 	if (lettersWritten != lettersRead || lettersWritten == -1)
 		return (0);
