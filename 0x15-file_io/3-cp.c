@@ -68,7 +68,7 @@ int main(int argc, char **argv)
 
 	buffer = malloc(1024);
 
-	fileFrom = open(argv[1], O_RDONLY)
+	fileFrom = open(argv[1], O_RDONLY);
 	CheckFileFrom(fileFrom, 'O', argv[1]);
 
 	fileTo = open(argv[2], O_CREAT | O_TRUNC | O_WRONLY, 0664);
