@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-void CheckFileTo(int num, char op, int fd = 0, char *fileName = NULL)
+void CheckFileTo(int num, char op, char *fileName)
 {	
 	if (num == -1 && (op == 'W' || op == 'O'))
 	{
@@ -12,21 +12,21 @@ void CheckFileTo(int num, char op, int fd = 0, char *fileName = NULL)
 	}
 	else if (num == -1 && op == 'C')
 	{
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd);
+		dprintf(STDERR_FILENO, "Error: Can't close fd %s\n", fileName);
 		exit(100);
 	}
 }
 
-void CheckFileFrom(int num, char op, int fd = 0, char *fileName = NULL)
+void CheckFileFrom(int num, char op, char *fileName)
 {
-	if (num == -1 && (op == 'W' || op == 'O'))
+	if (num == -1 && (op == 'R' || op == 'O'))
 	{
 		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", fileName);
 		exit(98);
 	}
 	else if (num == -1 && op == 'C')
 	{
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd);
+		dprintf(STDERR_FILENO, "Error: Can't close fd %s\n", fileName);
 		exit(100);
 	}
 }
@@ -36,6 +36,7 @@ int main(int argc, char **argv)
 	int fileTo, fileFrom, lettersRead = -1, lettersWritten = -1;
 	char *buffer;
 	int temp1, temp2;
+	char tempC1, tempC2;
 
 	if (argc != 3)
 	{
@@ -46,61 +47,37 @@ int main(int argc, char **argv)
 	buffer = malloc(1024);
 
 	fileFrom = open(argv[1], O_RDONLY);
-
-	if (fileFrom == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
-		free(buffer);
-		exit(98);
-	}
+	
+	CheckFileFrom(fileFrom, 'O', argv[1]);
 
 	fileTo = open(argv[2], O_CREAT | O_TRUNC | O_WRONLY, 0664);
 
-	if (fileTo == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]);
-		free(buffer);
-		exit(99);
-	}
+	CheckFileTo(fileTo, 'O', argv[2]);
 
 	while (lettersRead != 0)
 	{
 		lettersRead = read(fileFrom, buffer, 1024);
 
-		if (lettersRead == -1)
-		{
-			dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", argv[1]);
-			free(buffer);
-			exit(98);
-		}
+		CheckFileFrom(lettersRead, 'R', argv[1]);
 
 		lettersWritten = write(fileTo, buffer, lettersRead);
 
-		if (lettersWritten == -1 || lettersWritten != lettersRead)
-		{
-			dprintf(STDERR_FILENO, "Error: Can't write to %s\n", argv[2]);
-			free(buffer);
-			exit(99);
-		}
+		CheckFileTo(lettersWritten, 'W', argv[2]);
 	}
 
 
 	free(buffer);
 	temp1 = close(fileFrom);
 
-	if (temp1 == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fileFrom);
-		exit(100);
-	}
+	tempC1 = fileFrom + '0';
+
+	CheckFileFrom(temp1, 'C', &tempC1);
 
 	temp2 = close(fileTo);
 
-	if (temp2 == -1)
-	{
-		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fileTo);
-		exit(100);
-	}
+	tempC2 = fileTo + '0';
+
+	CheckFileTo(temp2, 'C', &tempC2);
 
 	return (0);
 }
