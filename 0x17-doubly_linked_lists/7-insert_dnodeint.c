@@ -29,7 +29,7 @@ size_t dlistint_len(const dlistint_t *h)
  */
 dlistint_t *insert_dnodeint_at_index(dlistint_t **h, unsigned int idx, int n)
 {
-	size_t lenOfList = dlistint_len(*h);	
+	size_t lenOfList = dlistint_len(*h);
 	dlistint_t *newNode = NULL, *ptr = NULL;
 
 	if (idx > lenOfList)
@@ -39,7 +39,7 @@ dlistint_t *insert_dnodeint_at_index(dlistint_t **h, unsigned int idx, int n)
 
 	if (!newNode)
 		return (NULL);
-	
+
 	newNode->n = n;
 	if (*h == NULL)
 	{
