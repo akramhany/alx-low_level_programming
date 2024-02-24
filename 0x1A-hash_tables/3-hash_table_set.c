@@ -9,9 +9,14 @@
 */
 int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 {
-	unsigned long int index = key_index((const unsigned char *) key, ht->size);
-	hash_node_t *new_node = (hash_node_t *) malloc(sizeof(hash_node_t));
-	hash_node_t *ptr = NULL;
+	unsigned long int index = 0;
+	hash_node_t *new_node = NULL;
+
+	if (ht == NULL)
+		return (0);
+
+	index = key_index((const unsigned char *) key, ht->size);
+	new_node = (hash_node_t *) malloc(sizeof(hash_node_t));
 
 	if (new_node == NULL)
 		return (0);
@@ -25,12 +30,29 @@ int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 	strcpy(new_node->key, key);
 	strcpy(new_node->value, value);
 
+	handle_insert(ht, index, new_node, key);
+	return (1);
+}
+
+/**
+* handle_insert - takes a hash table, index and a node, then insert it into it
+* @ht: the hash table.
+* @index: index of the node.
+* @new_node: node to insert.
+* @key: key of the inserted value
+* Return: void
+*/
+void handle_insert(hash_table_t *ht, unsigned long int index,
+		   hash_node_t *new_node, const char *key)
+{
+	hash_node_t *ptr = NULL;
+
 	ptr = ht->array[index];
 	if (ptr == NULL)
 	{
 		ht->array[index] = new_node;
 		new_node->next = NULL;
-		return (1);
+		return;
 	}
 
 	if (strcmp(ptr->key, key) == 0)
@@ -38,7 +60,7 @@ int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 		free(ptr);
 		ht->array[index] = new_node;
 		new_node->next = NULL;
-		return (1);
+		return;
 	}
 
 	while (ptr->next)
@@ -48,13 +70,11 @@ int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 			new_node->next = ptr->next->next;
 			free(ptr->next);
 			ptr->next = new_node;
-			return (1);
+			return;
 		}
 		ptr = ptr->next;
 	}
 
 	new_node->next = ht->array[index];
 	ht->array[index] = new_node;
-
-	return (1);
 }
