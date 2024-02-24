@@ -24,8 +24,14 @@ int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 	new_node->key = (char *) malloc(strlen(key) + 1);
 	new_node->value = (char *) malloc(strlen(value) + 1);
 
-	if (new_node->key == NULL || new_node->value == NULL)
+	if (new_node->key == NULL)
 		return (0);
+
+	if (new_node->value == NULL)
+	{
+		free(new_node->key);
+		return (0);
+	}
 
 	strcpy(new_node->key, key);
 	strcpy(new_node->value, value);
@@ -57,6 +63,8 @@ void handle_insert(hash_table_t *ht, unsigned long int index,
 
 	if (strcmp(ptr->key, key) == 0)
 	{
+		free(ptr->key);
+		free(ptr->value);
 		free(ptr);
 		ht->array[index] = new_node;
 		new_node->next = NULL;
@@ -68,6 +76,8 @@ void handle_insert(hash_table_t *ht, unsigned long int index,
 		if (strcmp(ptr->next->key, key) == 0)
 		{
 			new_node->next = ptr->next->next;
+			free(ptr->next->key);
+			free(ptr->next->value);
 			free(ptr->next);
 			ptr->next = new_node;
 			return;
