@@ -1,4 +1,4 @@
-OBJ = school.o main.o
+OBJ = ${wildcard *.o}
 SRC = school.c main.c
 CC = gcc
 NAME = school
