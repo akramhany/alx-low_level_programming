@@ -10,12 +10,22 @@ def island_perimeter(grid):
 
     height = len(grid)
 
-    island_blocks = 0
+    island_perimeter = 0
     for i in range(height):
-        for num in grid[i]:
-            if num == 1:
-                island_blocks += 1
+        width = len(grid[i])
 
-    if island_blocks == 0:
-        return 0
-    return island_blocks * 2 + 2
+        for j in range(width):
+            if grid[i][j] == 0:
+                continue
+            num = 4
+            if i + 1 < height and grid[i+1][j] == 1:
+                num -= 1
+            if i - 1 >= 0 and grid[i-1][j] == 1:
+                num -= 1
+            if j + 1 < width and grid[i][j+1] == 1:
+                num -= 1
+            if j - 1 >= 0 and grid[i][j-1] == 1:
+                num -= 1
+            island_perimeter += num
+
+    return island_perimeter
