@@ -1,4 +1,5 @@
 SRC := $(wildcard *.c)
+CC := gcc
 
 all: school
 
