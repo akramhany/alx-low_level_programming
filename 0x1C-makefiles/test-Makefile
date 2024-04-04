@@ -1,0 +1,2 @@
+comp:
+	gcc test.c -o test
